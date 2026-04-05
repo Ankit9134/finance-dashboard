@@ -4,7 +4,7 @@ import { useAppContext } from '../context/AppContext';
 import RoleToggle from './RoleBase';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const MOBILE_BREAKPOINT = 800;
+const mobilebreakpoint = 800;
 
 const NavBar = () => {
     const { transactions, darkMode, setDarkMode, role, } = useAppContext();
@@ -13,12 +13,12 @@ const NavBar = () => {
     const [showUser, setShowUser] = useState(false);
     const [isdownload, setIsdownload] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < mobilebreakpoint);
     const userRef = useRef(null);
     const downRef = useRef(null);
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+        const handleResize = () => setIsMobile(window.innerWidth < mobilebreakpoint);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
