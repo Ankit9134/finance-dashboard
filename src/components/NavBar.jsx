@@ -187,7 +187,7 @@ const NavBar = () => {
             {mobileMenuOpen && isMobile && (
                 <div className="fixed inset-0 z-50 flex justify-end">
                     <div className="absolute inset-0 bg-black/40" onClick={() => setMobileMenuOpen(false)} />
-                    <div className="relative w-40 h-full bg-white dark:bg-gray-900 shadow-xl flex flex-col py-4">
+                    <div className="relative w-48 h-full bg-white dark:bg-gray-900 shadow-xl flex flex-col py-4">
                         <div className="flex justify-between items-center px-4 pb-3 border-b border-gray-200 dark:border-gray-700">
                             <button
                                 onClick={() => { setDarkMode(!darkMode); setMobileMenuOpen(false); }}
@@ -234,15 +234,15 @@ const NavBar = () => {
                                     <div className='text-base'>
                                         Download
                                     </div>
-                                    {isdownload ? <ChevronUp className="w-4 h-4 text-gray-400 " /> : <ChevronDown className="w-4 h-4 text-gray-400 " />}
+                                    {isdownload ? <ChevronUp className="w-4 h-4 text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 " /> : <ChevronDown className="w-4 h-4 text-gray-400 hover:text-blue-600 dark:hover:text-blue-500" />}
                                 </button>
                                 {isdownload && (<div className="flex flex-col pl-2">
                                     <button
                                         onClick={() => { exportToJSON(); setMobileMenuOpen(false); }}
                                         className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-500 transition-colors"
                                     >
-                                        <Download className="w-4 h-4 " />
-                                        <span className="text-xs font-medium text-gray-700 dark:text-gray-200">Export JSON</span>
+                                        <Download className="w-4 h-4" />
+                                        <span className="text-xs font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-500">Export JSON</span>
 
                                     </button>
                                     <button
@@ -250,7 +250,7 @@ const NavBar = () => {
                                         className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-500 transition-colors"
                                     >
                                         <Download className="w-4 h-4 " />
-                                        <span className="text-xs font-medium text-gray-700 dark:text-gray-200">Export CSV</span>
+                                        <span className="text-xs font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-500">Export CSV</span>
                                     </button>
                                 </div>
                                 )}
@@ -261,9 +261,9 @@ const NavBar = () => {
                                     className="w-full flex items-center gap-3 px-4 py-2  dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-500 transition-colors"
                                 >
                                     <User className="w-5 h-5  dark:text-gray-100" />
-                                    <span className="text-base font-medium  dark:text-gray-100">{role.charAt(0).toUpperCase() +
+                                    <span className="text-base font-medium  dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-500">{role.charAt(0).toUpperCase() +
                                         role.slice(1)}</span>
-                                    {showUser ? <ChevronUp className="w-4 h-4 text-gray-400 " /> : <ChevronDown className="w-4 h-4 text-gray-400 " />}
+                                    {showUser ? <ChevronUp className="w-4 h-4 text-gray-400 hover:text-blue-600 dark:hover:text-blue-500" /> : <ChevronDown className="w-4 h-4 text-gray-400 hover:text-blue-600 dark:hover:text-blue-500" />}
                                 </button>
                                 {showUser && (
                                     <div className="mx-2  rounded-lg shadow-lg border border-gray-100 dark:border-gray-800 pl-1">

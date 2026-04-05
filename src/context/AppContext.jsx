@@ -78,9 +78,11 @@ export const AppProvider = ({ children }) => {
 
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
-      filtered = filtered.filter(t => 
+      filtered = filtered.filter(t =>
         t.description.toLowerCase().includes(searchLower) ||
-        t.category.toLowerCase().includes(searchLower)
+        t.category.toLowerCase().includes(searchLower) ||
+        t.type.toLowerCase().includes(searchLower) ||
+        String(t.amount).includes(searchLower)
       );
     }
     

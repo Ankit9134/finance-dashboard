@@ -156,16 +156,16 @@ const Transactions = () => {
             type="month"
             value={filters.month}
             onChange={(e) => setFilters({ ...filters, month: e.target.value })}
-            className="px-4 py-2 border border-gray-400 w-32 lg:w-40  dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+            className="px-4 py-2 border border-gray-400 w-32 lg:w-40 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           />
         </div>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full min-w-[640px] table-auto">
           <thead className="bg-gray-800 dark:bg-gray-700">
             <tr>
-              <th className="lg:px-6 px-3 py-3 text-left text-xs items-center font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:text-blue-600 dark:hover:text-blue-500 "
+              <th className="lg:px-6 px-3 py-3 w-36 text-left text-xs items-center font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:text-blue-600 dark:hover:text-blue-500 "
                 onClick={() => handleSort('date')}>
                 <div className="flex items-center gap-2">
                   Date    <SortIcon column="date" />
@@ -177,19 +177,19 @@ const Transactions = () => {
                   Description <SortIcon column="description" />
                 </div>
               </th>
-              <th className="lg:px-6 px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:text-blue-600 dark:hover:text-blue-500 transition-colors"
+              <th className="lg:px-6 px-3 py-3  text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:text-blue-600 dark:hover:text-blue-500 transition-colors"
                 onClick={() => handleSort('category')}>
                 <div className="flex items-center gap-2">
                   Category <SortIcon column="category" />
                 </div>
               </th>
-              <th className="lg:px-6 px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:text-blue-600 dark:hover:text-blue-500 transition-colors"
+              <th className="lg:px-6 px-3 py-3  text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:text-blue-600 dark:hover:text-blue-500 transition-colors"
                 onClick={() => handleSort('amount')}>
                 <div className="flex items-center gap-2">
                   Amount <SortIcon column="amount" />
                 </div>
               </th>
-              <th className="lg:px-6 px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:text-blue-600 dark:hover:text-blue-500 transition-colors"
+              <th className="lg:px-6 px-3 py-3  text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:text-blue-600 dark:hover:text-blue-500 transition-colors"
                 onClick={() => handleSort('type')}>
                 <div className="flex items-center gap-2">
                   Type <SortIcon column="type" />
@@ -218,10 +218,10 @@ const Transactions = () => {
                   <td className="lg:px-6 px-3 py-4 text-sm text-gray-900 dark:text-white">
                     {transaction.description}
                   </td>
-                  <td className="lg:px-6 px-3 py-4 text-sm">
-                    <span className="px-2 py-1 bg-gray-100 dark:bg-gray-600 rounded-full text-xs">
+                  <td className="lg:px-6 px-3 py-4 text-sm text-gray-900 dark:text-whit">
+                    
                       {transaction.category}
-                    </span>
+                  
                   </td>
                   <td className="lg:px-6 px-3 py-4 text-sm">
                     <span className={transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}>

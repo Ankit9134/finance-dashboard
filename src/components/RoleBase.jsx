@@ -11,7 +11,7 @@ const RoleBase = ({ onClose }) => {
   };
 
   return (
-    <div className="p-3 w-48">
+    <div className="p-3">
       {[
         { value: 'viewer', label: 'Viewer', icon: Eye },
         { value: 'admin', label: 'Admin', icon: Shield },
