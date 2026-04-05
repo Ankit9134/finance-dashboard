@@ -165,7 +165,7 @@ const Transactions = () => {
         <table className="w-full min-w-[640px] table-auto">
           <thead className="bg-gray-800 dark:bg-gray-700">
             <tr>
-              <th className="lg:px-6 px-3 py-3 w-36 text-left text-xs items-center font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:text-blue-600 dark:hover:text-blue-500 "
+              <th className="lg:px-6 px-3 py-3 w-40 text-left text-xs items-center font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:text-blue-600 dark:hover:text-blue-500 "
                 onClick={() => handleSort('date')}>
                 <div className="flex items-center gap-2">
                   Date    <SortIcon column="date" />

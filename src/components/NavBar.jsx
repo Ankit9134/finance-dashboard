@@ -127,7 +127,7 @@ const NavBar = () => {
                                                     className="rounded-lg p-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                                                 >
                                                     <div className="flex items-center gap-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-500">
-                                                        <Download className="w-5 h-5" />
+                                                        <Download className="w-5 h-5"/>
                                                         <p>Export to JSON</p>
                                                     </div>
                                                 </button>
@@ -136,7 +136,7 @@ const NavBar = () => {
                                                     className="rounded-lg p-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                                                 >
                                                     <div className="flex items-center gap-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-500">
-                                                        <Download className="w-5 h-5" />
+                                                        <Download className="w-5 h-5"/>
                                                         <p>Export to CSV</p>
                                                     </div>
                                                 </button>
@@ -234,7 +234,7 @@ const NavBar = () => {
                                     <div className='text-base'>
                                         Download
                                     </div>
-                                    {isdownload ? <ChevronUp className="w-4 h-4 text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 " /> : <ChevronDown className="w-4 h-4 text-gray-400 hover:text-blue-600 dark:hover:text-blue-500" />}
+                                    {isdownload ? <ChevronUp className="w-4 h-4 " /> : <ChevronDown className="w-4 h-4 " />}
                                 </button>
                                 {isdownload && (<div className="flex flex-col pl-2">
                                     <button
@@ -263,7 +263,7 @@ const NavBar = () => {
                                     <User className="w-5 h-5  dark:text-gray-100" />
                                     <span className="text-base font-medium  dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-500">{role.charAt(0).toUpperCase() +
                                         role.slice(1)}</span>
-                                    {showUser ? <ChevronUp className="w-4 h-4 text-gray-400 hover:text-blue-600 dark:hover:text-blue-500" /> : <ChevronDown className="w-4 h-4 text-gray-400 hover:text-blue-600 dark:hover:text-blue-500" />}
+                                    {showUser ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                                 </button>
                                 {showUser && (
                                     <div className="mx-2  rounded-lg shadow-lg border border-gray-100 dark:border-gray-800 pl-1">
