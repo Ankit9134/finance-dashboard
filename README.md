@@ -1,4 +1,4 @@
-# 💰 Finance Dashboard
+#  Finance Dashboard
 
 A modern personal finance management dashboard built with React, Vite, and Tailwind CSS. Track your income, expenses, and financial insights with an intuitive UI.
 
@@ -52,11 +52,11 @@ src/
 - **Mobile hamburger menu** — Menu Bar in Mobile View 
 - Live "Last updated" timestamp that refreshes every 5 minutes
 
-### 🏠 Header
+###  Header
 - Displays current month and year
 - Shows **Total Balance** 
 
-### 📊 Dashboard (Home Page)
+###  Dashboard (Home Page)
 - **Month selector** — filter summary by any available month
 - **Summary Cards** — Balance, Income, Expenses for selected month
 - **Monthly Trend Chart** — Comparing income vs expenses over months
