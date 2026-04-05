@@ -6,6 +6,7 @@ import { useAppContext } from '../context/AppContext';
 const Transactions = () => {
   const {
     role,
+    transactions: allTransactions,
     filters,
     setFilters,
     getFilteredTransactions,
@@ -13,6 +14,8 @@ const Transactions = () => {
     updateTransaction,
     deleteTransaction,
   } = useAppContext();
+
+  const availableMonths = [...new Set(allTransactions.map(t => t.date?.slice(0, 7)).filter(Boolean))].sort((a, b) => b.localeCompare(a));
 
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({
@@ -141,23 +144,34 @@ const Transactions = () => {
               />
             </div>
           </div>
-
+<div className="relative">
           <select
             value={filters.type}
             onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-            className="px-4 py-2 w-32 lg:w-40 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className=" appearance-none px-4 py-2 pr-8 w-32 lg:w-40 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
             <option value="all">All Types</option>
             <option value="income">Income Only</option>
             <option value="expense">Expenses Only</option>
-          </select>
-
-          <input
-            type="month"
-            value={filters.month}
-            onChange={(e) => setFilters({ ...filters, month: e.target.value })}
-            className="px-4 py-2 border border-gray-400 w-40 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          />
+             </select>
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+         
+</div>
+          <div className="relative">
+            <select
+              value={filters.month}
+              onChange={(e) => setFilters({ ...filters, month: e.target.value })}
+              className="appearance-none px-4 py-2 pr-8 w-36 lg:w-40 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="">All Months</option>
+              {availableMonths.map(m => (
+                <option key={m} value={m}>
+                  {new Date(m + '-01').toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+          </div>
         </div>
       </div>
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays,ChevronDown, } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import SummaryCards from './SummaryCards';
 import { MonthlyTrendChart, SpendingBreakdownChart } from './Charts';
@@ -55,7 +55,7 @@ const Dashboard = () => {
               <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(e.target.value)}
-                className="pl-9 pr-4 py-2 text-sm font-medium border border-blue-200 dark:border-blue-800 rounded-xl bg-blue-50 dark:bg-white text-gray-700 dark:text-gray-800 shadow-sm hover:border-blue-400 dark:hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer transition-colors"
+                className="pl-9 appearance-none pr-4 py-2 text-sm font-medium border border-blue-250 dark:border-blue-800 rounded-xl bg-blue dark:bg-white text-gray-700 dark:text-gray-800 shadow-sm hover:border-blue-400 dark:hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer transition-colors"
               >
                 {availableMonths.map(m => (
                   <option key={m} value={m}>
@@ -63,6 +63,7 @@ const Dashboard = () => {
                   </option>
                 ))}
               </select>
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
           </div>
         </div>
