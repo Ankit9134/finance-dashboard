@@ -143,18 +143,6 @@ Global state includes:
 ##  Routing
 Home , Dashboard ,other
 
-##  Installation & Setup
-
-```bash
-# Clone the repository
-git clone <repo-url>
-cd finance-dashboard
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
 
 # Build for production
 npm run build
