@@ -45,12 +45,11 @@ src/
 ##  Features & Functionality
 
 ###  Navigation (NavBar)
-- Desktop navigation links: **Home**, **Transactions**
+- **Desktop navigation links: **Home**, **Transactions**
 - **Download dropdown** — hover to export options (JSON / CSV)
 - **User dropdown** — hover to switch roles (Admin / Viewer)
 - **Dark mode toggle** — Sun/Moon icon to switch themes
 - **Mobile hamburger menu** — Menu Bar in Mobile View 
-- Live "Last updated" timestamp that refreshes every 5 minutes
 
 ###  Header
 - Displays current month and year
@@ -97,14 +96,14 @@ src/
 
 ### Role-Based Access (RoleBase)
 - Two roles: **Viewer** and **Admin**
-- Role persisted in `localStorage`
+- Role Save in localstorage
 - **Viewer** — read-only access, no add/edit/delete buttons
 - **Admin** — full CRUD access on transactions
 - Active role highlighted with blue indicator dot
 
 ###  Dark Mode
 - Full dark mode support across all components
-- State persisted in `localStorage`
+- State Save in localstorage
 - Toggled via navbar button (Sun = light, Moon = dark)
 
 ###  Data Export
@@ -144,7 +143,7 @@ Global state includes:
 ##  Routing
 Home , Dashboard ,other
 
-## 📦 Installation & Setup
+##  Installation & Setup
 
 ```bash
 # Clone the repository
