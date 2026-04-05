@@ -156,7 +156,7 @@ const Transactions = () => {
             type="month"
             value={filters.month}
             onChange={(e) => setFilters({ ...filters, month: e.target.value })}
-            className="px-4 py-2 border border-gray-400 w-32 lg:w-40 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="px-4 py-2 border border-gray-400 w-40 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           />
         </div>
       </div>
