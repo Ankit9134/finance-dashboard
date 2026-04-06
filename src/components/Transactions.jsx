@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Search, ChevronUp, ChevronDown, Edit2, Trash2, X, Plus } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, ChevronUp, ChevronDown, Edit2, Trash2, X, Plus, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 import { formatCurrency, formatDate } from '../utils/helpers';
 import { useAppContext } from '../context/AppContext';
 
@@ -18,60 +18,46 @@ const Transactions = () => {
   const availableMonths = [...new Set(allTransactions.map(t => t.date?.slice(0, 7)).filter(Boolean))].sort((a, b) => b.localeCompare(a));
 
   const [editingId, setEditingId] = useState(null);
-  const [editForm, setEditForm] = useState({
-    date: '',
-    description: '',
-    category: '',
-    amount: '',
-    type: 'expense',
-  });
+  const [editForm, setEditForm] = useState({ date: '', description: '', category: '', amount: '', type: 'expense' });
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [visibleRows, setVisibleRows] = useState(new Set());
+  const [deletingId, setDeletingId] = useState(null);
+  const rowRefs = useRef({});
 
   useEffect(() => {
     const handler = () => setShowAddForm(true);
     window.addEventListener('openAddTransactionModal', handler);
     return () => window.removeEventListener('openAddTransactionModal', handler);
   }, []);
-  const today = new Date().toISOString().split('T')[0];
 
-  const [newTransaction, setNewTransaction] = useState({
-    description: '',
-    amount: '',
-    category: '',
-    date: today,
-    type: 'expense',
-  });
+  const today = new Date().toISOString().split('T')[0];
+  const [newTransaction, setNewTransaction] = useState({ description: '', amount: '', category: '', date: today, type: 'expense' });
 
   const transactions = getFilteredTransactions();
 
-  const handleSort = (key) => {
-    setFilters({
-      ...filters,
-      sortBy: key,
-      sortOrder: filters.sortBy === key && filters.sortOrder === 'asc' ? 'desc' : 'asc',
+  useEffect(() => {
+    setVisibleRows(new Set());
+    transactions.forEach((t, i) => {
+      setTimeout(() => {
+        setVisibleRows(prev => new Set([...prev, t.id]));
+      }, i * 60);
     });
-  };
+  }, [transactions.length, filters]);
 
-  const [showEditModal, setShowEditModal] = useState(false);
+  const handleSort = (key) => {
+    setFilters({ ...filters, sortBy: key, sortOrder: filters.sortBy === key && filters.sortOrder === 'asc' ? 'desc' : 'asc' });
+  };
 
   const handleEdit = (transaction) => {
     if (role !== 'admin') return;
     setEditingId(transaction.id);
-    setEditForm({
-      date: transaction.date || '',
-      description: transaction.description || '',
-      category: transaction.category || '',
-      amount: transaction.amount || '',
-      type: transaction.type || 'expense',
-    });
+    setEditForm({ date: transaction.date || '', description: transaction.description || '', category: transaction.category || '', amount: transaction.amount || '', type: transaction.type || 'expense' });
     setShowEditModal(true);
   };
 
   const handleSaveEdit = () => {
-    updateTransaction(editingId, {
-      ...editForm,
-      amount: parseFloat(editForm.amount) || 0,
-    });
+    updateTransaction(editingId, { ...editForm, amount: parseFloat(editForm.amount) || 0 });
     setEditingId(null);
     setShowEditModal(false);
   };
@@ -79,7 +65,8 @@ const Transactions = () => {
   const handleDelete = (id) => {
     if (role !== 'admin') return;
     if (window.confirm('Are you sure you want to delete this transaction?')) {
-      deleteTransaction(id);
+      setDeletingId(id);
+      setTimeout(() => { deleteTransaction(id); setDeletingId(null); }, 350);
     }
   };
 
@@ -88,97 +75,69 @@ const Transactions = () => {
       alert('Please fill all fields');
       return;
     }
-    addTransaction({
-      ...newTransaction,
-      amount: parseFloat(newTransaction.amount),
-    });
-    setNewTransaction({
-      description: '',
-      amount: '',
-      category: '',
-      date: today,
-      type: 'expense',
-    });
+    addTransaction({ ...newTransaction, amount: parseFloat(newTransaction.amount) });
+    setNewTransaction({ description: '', amount: '', category: '', date: today, type: 'expense' });
     setShowAddForm(false);
   };
 
   const SortIcon = ({ column }) => {
-    if (filters.sortBy !== column) return <ChevronUp className="w-4 h-4 " />;
-    return filters.sortOrder === 'asc' ?
-      <ChevronUp className="w-4 h-4" /> :
-      <ChevronDown className="w-4 h-4" />;
+    if (filters.sortBy !== column) return <ChevronUp className="w-5 h-5 opacity-70" />;
+    return filters.sortOrder === 'asc' ? <ChevronUp className="w-5 h-5 text-blue-500" /> : <ChevronDown className="w-5 h-5 text-blue-500" />;
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg inset-ring overflow-hidden">
-      <div className="p-5 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex flex-wrap justify-between items-center gap-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-            Transactions
-          </h2>
-          <div className="flex gap-3">
-            {role === 'admin' && (
-              <div className="relative">
-                <button
-                  onClick={() => setShowAddForm(!showAddForm)}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Transaction
-                </button>
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
 
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-3 mt-3">
-          <div className="flex-1 min-w-[200px]">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search transactions..."
-                value={filters.search}
-                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-                className="w-full pl-10 pr-4 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-            </div>
-          </div>
-<div className="relative">
-          <select
-            value={filters.type}
-            onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-            className=" appearance-none px-4 py-2 pr-8 w-32 lg:w-40 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          >
-            <option value="all">All Types</option>
-            <option value="income">Income Only</option>
-            <option value="expense">Expenses Only</option>
-             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-         
-</div>
-          <div className="relative">
-            <select
-              value={filters.month}
-              onChange={(e) => setFilters({ ...filters, month: e.target.value })}
-              className="appearance-none px-4 py-2 pr-8 w-36 lg:w-40 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+      <div className="p-5 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/80">
+        <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Transactions</h2>
+          {role === 'admin' && (
+            <button
+              onClick={() => setShowAddForm(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl text-sm font-medium shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
             >
+              <Plus className="w-4 h-4" />
+              Add Transaction
+            </button>
+          )}
+        </div>
+
+        <div className="flex flex-wrap gap-3">
+          <div className="flex-1 min-w-[200px] relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search transactions..."
+              value={filters.search}
+              onChange={e => setFilters({ ...filters, search: e.target.value })}
+              className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+            />
+          </div>
+          <div className="relative">
+            <select value={filters.type} onChange={e => setFilters({ ...filters, type: e.target.value })}
+              className="appearance-none px-4 py-2 pr-8 w-36 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200">
+              <option value="all">All Types</option>
+              <option value="income">Income</option>
+              <option value="expense">Expenses</option>
+            </select>
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+          </div>
+          <div className="relative">
+            <select value={filters.month} onChange={e => setFilters({ ...filters, month: e.target.value })}
+              className="appearance-none px-4 py-2 pr-8 w-40 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200">
               <option value="">All Months</option>
               {availableMonths.map(m => (
-                <option key={m} value={m}>
-                  {new Date(m + '-01').toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
-                </option>
+                <option key={m} value={m}>{new Date(m + '-01').toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}</option>
               ))}
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           </div>
         </div>
       </div>
-
       <div className="overflow-x-auto">
         <table className="w-full min-w-[640px] table-auto">
-          <thead className="bg-gray-800 dark:bg-gray-700">
-            <tr>
+          <thead>
+            <tr className="bg-gray-100 dark:bg-gray-700/60 border-b border-gray-100 dark:border-gray-700">
               <th className="lg:px-6 px-3 py-3 w-40 text-left text-xs items-center font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:text-blue-600 dark:hover:text-blue-500 "
                 onClick={() => handleSort('date')}>
                 <div className="flex items-center gap-2">
@@ -215,54 +174,80 @@ const Transactions = () => {
                 </th>
               )}
             </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700 px-1">
-            {transactions.length === 0 ? (
-              <tr>
-                <td colSpan={role === 'admin' ? 5 : 4} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400 ">
-                  No transactions found
-                </td>
-              </tr>
-            ) : (
-              transactions.map((transaction) => (
-                <tr key={transaction.id} className="hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                  <td className="lg:px-6 px-3 py-4 text-sm text-gray-900 dark:text-white">
+        </thead>
+
+        <tbody className="divide-y divide-gray-50 dark:divide-gray-700/50">
+          {transactions.length === 0 ? (
+            <tr>
+              <td colSpan={role === 'admin' ? 6 : 5} className="px-6 py-16 text-center">
+                <div className="flex flex-col items-center gap-2 text-gray-400 dark:text-gray-500">
+                  <Search className="w-8 h-8 opacity-40" />
+                  <p className="text-sm font-medium">No transactions found</p>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            transactions.map((transaction, index) => {
+              const isVisible = visibleRows.has(transaction.id);
+              const isDeleting = deletingId === transaction.id;
+              const isIncome = transaction.type === 'income';
+              return (
+                <tr
+                  key={transaction.id}
+                  style={{
+                    transform: isDeleting ? 'translateX(100%)' : isVisible ? 'translateX(0)' : 'translateX(-16px)',
+                    opacity: isDeleting ? 0 : isVisible ? 1 : 0,
+                    transition: isDeleting
+                      ? 'transform 0.35s ease-in, opacity 0.35s ease-in'
+                      : 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease',
+                  }}
+                  className="hover:bg-blue-100/40 dark:hover:bg-gray-700/40 transition-colors duration-150"
+                >
+                  <td className="lg:px-6 px-3 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                     {formatDate(transaction.date)}
                   </td>
-                  <td className="lg:px-6 px-3 py-4 text-sm text-gray-900 dark:text-white">
+                  <td className="lg:px-6 px-3 py-4 text-sm font-medium text-gray-900 dark:text-white max-w-[180px] truncate">
                     {transaction.description}
                   </td>
-                  <td className="lg:px-6 px-3 py-4 text-sm text-gray-900 dark:text-whit">
-                    
-                      {transaction.category}
-                  
-                  </td>
                   <td className="lg:px-6 px-3 py-4 text-sm">
-                    <span className={transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}>
-                      {transaction.type === 'income' ? '+' : '-'}{formatCurrency(parseFloat(transaction.amount) || 0)}
+                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                      {transaction.category}
                     </span>
                   </td>
-                  <td className="lg:px-6 px-3 py-4 text-sm text-gray-900 dark:text-white">
-                    {transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}
+                  <td className="lg:px-6 px-3 py-4 text-sm font-semibold min-w-[130px]">
+                    <span className={`flex items-center gap-1 ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500 dark:text-red-400'}`}>
+                      {isIncome
+                        ? <ArrowUpCircle className="w-4 h-4" />
+                        : <ArrowDownCircle className="w-4 h-4" />}
+                      {isIncome ? '+' : '-'}{formatCurrency(parseFloat(transaction.amount) || 0)}
+                    </span>
+                  </td>
+                  <td className="lg:px-6 px-3 py-4 text-sm">
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${isIncome ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400' : 'bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400'}`}>
+                      {transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}
+                    </span>
                   </td>
                   {role === 'admin' && (
-                    <td className="px-6 py-4">
-                      <div className="flex gap-3">
-                        <button onClick={() => handleEdit(transaction)} className="text-blue-600 hover:text-blue-700">
-                          <Edit2 className="w-5 h-5" />
+                    <td className="lg:px-6 px-3 py-4">
+                      <div className="flex gap-2">
+                        <button onClick={() => handleEdit(transaction)}
+                          className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                          <Edit2 className="w-4 h-4" />
                         </button>
-                        <button onClick={() => handleDelete(transaction.id)} className="text-red-600 hover:text-red-700">
-                          <Trash2 className="w-5 h-5" />
+                        <button onClick={() => handleDelete(transaction.id)}
+                          className="p-1.5 rounded-lg text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors">
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </td>
                   )}
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+              );
+            })
+          )}
+        </tbody>
+      </table>
+    </div>
       {showAddForm && (
          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setShowAddForm(false)}>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 w-full max-w-md mx-4 p-6" onClick={(e) => e.stopPropagation()}>
@@ -391,9 +376,8 @@ const Transactions = () => {
           </div>
         </div>
       )}
-    </div>
+    </div >
   );
 };
-
 
 export default Transactions;
